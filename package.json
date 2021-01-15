@@ -1,0 +1,36 @@
+{
+	"name": "prediction-bot",
+	"version": "1.0.0",
+	"main": "index.js",
+	"author": "Mohammad MohammadAlian <mralian.dev@gmail.com>",
+	"license": "MIT",
+	"scripts": {
+		"lint": "eslint \"./**/*.js\"",
+		"lint:fix": "eslint \"./**/*.js\" --quiet --fix",
+		"format": "prettier --write \"./**/*.{js,json}\"",
+		"start": "node src/server.js",
+		"dev": "nodemon src/server.js",
+		"commit": "cz"
+	},
+	"dependencies": {
+		"dotenv": "8.2.0",
+		"express": "4.17.1",
+		"node-telegram-bot-api": "0.51.0"
+	},
+	"devDependencies": {
+		"@commitlint/config-conventional": "11.0.0",
+		"commitizen": "4.2.2",
+		"commitlint": "11.0.0",
+		"eslint": "7.17.0",
+		"eslint-config-airbnb-base": "14.2.1",
+		"eslint-config-prettier": "7.1.0",
+		"eslint-plugin-import": "2.22.1",
+		"husky": "4.3.7",
+		"lint-staged": "10.5.3",
+		"nodemon": "2.0.7",
+		"prettier": "2.2.1"
+	},
+	"engines": {
+		"node": "14.x"
+	}
+}
