@@ -18,14 +18,14 @@ if (configs.isProduction) {
 
 // eslint-disable-next-line consistent-return
 bot.on('message', (message) => {
-	if (message?.text) {
+	if (message?.text === '/start') {
 		const text = `سلام سلام، خوش اومدی 👋
 
 یکی از ایموجیای ⚽️ 🏀🎰🎯🎲 رو برام بفرست تا معجزه رو ببینی 😉
 
 حواست باشه تلگرامت آپدیت باشه ⚠️`;
 		return bot.sendMessage(message.chat.id, text, {
-			reply_to_message_id: message.message,
+			reply_to_message_id: message.message_id,
 		});
 	}
 
@@ -63,7 +63,6 @@ bot.on('message', (message) => {
 			reply_to_message_id: message.message_id,
 		});
 	} else if (emoji === '🎯') {
-		console.log(value);
 		bot.sendMessage(message.chat.id, dartResponses[value - 1], {
 			reply_to_message_id: message.message_id,
 		});
