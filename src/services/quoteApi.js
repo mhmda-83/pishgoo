@@ -21,7 +21,6 @@ class QuoteApi {
 		const quotesCount = quotes.length;
 		const randomQuoteIndex = randomRangeNumber(0, quotesCount + 1);
 		const randomQuote = quotes[randomQuoteIndex];
-		console.log(randomQuote);
 		return {
 			text: randomQuote.quote,
 			author: randomQuote.author.trim(),
