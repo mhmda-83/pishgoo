@@ -8,15 +8,15 @@ const configs = getConfigs();
 
 const messages = require('./messages');
 
-let bot;
-if (configs.isProduction) {
-	bot = new TelegramBot(configs.botToken, { polling: false });
-} else {
-	bot = new TelegramBot(configs.botToken, {
-		polling: true,
-		request: { proxy: 'http://127.0.0.1:8118', url: 'http://google.com' },
-	});
-}
+const bot = new TelegramBot(
+	configs.botToken,
+	configs.isProduction
+		? { polling: false }
+		: {
+				polling: true,
+				request: { proxy: 'http://127.0.0.1:8118', url: 'http://google.com' },
+		  }
+);
 
 // eslint-disable-next-line consistent-return
 bot.on('message', (message) => {
