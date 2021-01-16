@@ -9,7 +9,7 @@ module.exports = {
 		ecmaVersion: 12,
 	},
 	rules: {
-		indent: ['error', 'tab'],
+		indent: 'off',
 		'no-tabs': 0,
 		'no-console': 0,
 	},

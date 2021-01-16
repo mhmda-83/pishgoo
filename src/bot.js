@@ -19,7 +19,8 @@ const bot = new TelegramBot(
 		: {
 				polling: true,
 				request: { proxy: 'http://127.0.0.1:8118', url: 'http://google.com' },
-		  }
+				// eslint-disable-next-line no-mixed-spaces-and-tabs
+		  },
 );
 
 // eslint-disable-next-line consistent-return

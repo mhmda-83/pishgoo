@@ -1,8 +1,9 @@
 const messages = require('./messages');
 
 function getMessageRes(emoji, value) {
-	if (typeof emoji !== 'string' && typeof value !== 'number')
+	if (typeof emoji !== 'string' && typeof value !== 'number') {
 		throw Error('type of emoji and value parameter must be string & number');
+	}
 
 	switch (emoji) {
 		case '🏀':
@@ -13,13 +14,13 @@ function getMessageRes(emoji, value) {
 			return messages.dartResponses[value - 1];
 		case '⚽':
 			return messages.footballResponses[value - 1];
-		case '🎰':
+		case '🎰': {
 			const numbers = [1, 22, 43, 64];
 
 			return numbers.includes(value)
-				? messages.doubleTripleChance.successfull
+				? messages.doubleTripleChance.successful
 				: messages.doubleTripleChance.unsuccessful;
-
+		}
 		default:
 			return value;
 	}
