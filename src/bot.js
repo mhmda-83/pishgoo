@@ -1,8 +1,10 @@
+// get rid of NodeTelegramBotApi deprecation warning
 process.env.NTBA_FIX_319 = 1;
 
 const TelegramBot = require('node-telegram-bot-api');
 
 const { getConfigs } = require('./configs');
+const Statistics = require('./models/statistics');
 
 const configs = getConfigs();
 
@@ -31,6 +33,20 @@ bot.on('message', (message) => {
 
 	if (!message.dice) return undefined;
 	const { emoji, value } = message.dice;
+
+	const diceData = message.dice;
+	if (!diceData) return undefined;
+
+	if (message.from?.id) {
+		Statistics.create({
+			userId: message.from.id,
+			chat: {
+				id: message.chat.id,
+				type: message.chat.type,
+				title: message.chat.title,
+			},
+		});
+	}
 
 	bot.sendMessage(message.chat.id, getMessageRes(emoji, value), {
 		reply_to_message_id: message.message_id,

@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const express = require('express');
 
 const app = express();
@@ -21,6 +22,17 @@ app.post(`/bot${configs.botToken}`, (req, res) => {
 	res.sendStatus(200);
 });
 
-app.listen(configs.port, () => {
-	console.log(`server started on port ${configs.port}`);
-});
+mongoose
+	.connect(configs.databaseConnectionString, {
+		useNewUrlParser: true,
+		useCreateIndex: true,
+		useFindAndModify: true,
+		useUnifiedTopology: true,
+	})
+	.then(() => {
+		console.log('Database Connected.');
+		app.listen(configs.port, () => {
+			console.log(`server started on port ${configs.port}`);
+		});
+	})
+	.catch(console.error);
