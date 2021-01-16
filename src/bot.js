@@ -1,8 +1,10 @@
+// get rid of NodeTelegramBotApi deprecation warning
 process.env.NTBA_FIX_319 = 1;
 
 const TelegramBot = require('node-telegram-bot-api');
 
 const { getConfigs } = require('./configs');
+const Statistics = require('./models/statistics');
 
 const configs = getConfigs();
 
@@ -34,6 +36,18 @@ bot.on('message', (message) => {
 
 	const diceData = message.dice;
 	if (!diceData) return undefined;
+
+	if (message.from?.id) {
+		Statistics.create({
+			userId: message.from.id,
+			chat: {
+				id: message.chat.id,
+				type: message.chat.type,
+				title: message.chat.title,
+			},
+		});
+	}
+
 	const basketballResponses = [
 		'میخوره به قسمت بالایی سبد و میره بیرون.',
 		'دور سبد می‌چرخه و در نهایت میره بیرون.',
