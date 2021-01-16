@@ -15,7 +15,7 @@ const getMessageRes = require('./getMessageRes');
 const bot = new TelegramBot(
 	configs.botToken,
 	configs.isProduction
-		? { polling: false }
+		? { polling: true }
 		: {
 				polling: true,
 				request: { proxy: 'http://127.0.0.1:8118', url: 'http://google.com' },
