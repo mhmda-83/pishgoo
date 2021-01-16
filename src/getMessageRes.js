@@ -14,6 +14,8 @@ function getMessageRes(emoji, value) {
 			return messages.dartResponses[value - 1];
 		case '⚽':
 			return messages.footballResponses[value - 1];
+		case '🎳':
+			return messages.bowlingResponses[value - 1];
 		case '🎰': {
 			const numbers = [1, 22, 43, 64];
 
