@@ -8,6 +8,8 @@ const configs = getConfigs();
 
 const messages = require('./messages');
 
+const getMessageRes = require('./getMessageRes');
+
 const bot = new TelegramBot(
 	configs.botToken,
 	configs.isProduction
@@ -27,54 +29,12 @@ bot.on('message', (message) => {
 		});
 	}
 
-	const diceData = message.dice;
-	if (!diceData) return undefined;
-	const { emoji, value } = diceData;
-	if (emoji === '🏀') {
-		bot.sendMessage(message.chat.id, messages.basketballResponses[value - 1], {
-			reply_to_message_id: message.message_id,
-		});
-	} else if (emoji === '🎲') {
-		bot.sendMessage(message.chat.id, `عدد ${value}.`, {
-			reply_to_message_id: message.message_id,
-		});
-	} else if (emoji === '🎯') {
-		bot.sendMessage(message.chat.id, messages.dartResponses[value - 1], {
-			reply_to_message_id: message.message_id,
-		});
-	} else if (emoji === '⚽') {
-		bot.sendMessage(message.chat.id, messages.footballResponses[value - 1], {
-			reply_to_message_id: message.message_id,
-		});
-	} else if (emoji === '🎰') {
-		// 1 = triple bar
-		// 22 = triple grape
-		// 43 = triple lemon
-		// 64 = triple seven
-		const numbers = [1, 22, 43, 64];
+	if (!message.dice) return undefined;
+	const { emoji, value } = message.dice;
 
-		if (numbers.includes(value)) {
-			bot.sendMessage(
-				message.chat.id,
-				messages.doubleTripleChance.successfull,
-				{
-					reply_to_message_id: message.message_id,
-				}
-			);
-		} else {
-			bot.sendMessage(
-				message.chat.id,
-				messages.doubleTripleChance.unsuccessful,
-				{
-					reply_to_message_id: message.message_id,
-				}
-			);
-		}
-	} else {
-		bot.sendMessage(message.chat.id, value, {
-			reply_to_message_id: message.message_id,
-		});
-	}
+	bot.sendMessage(message.chat.id, getMessageRes(emoji, value), {
+		reply_to_message_id: message.message_id,
+	});
 });
 
 module.exports = bot;
