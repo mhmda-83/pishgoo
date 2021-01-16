@@ -8,9 +8,9 @@ const Statistics = require('./models/statistics');
 
 const configs = getConfigs();
 
-const messages = require('./messages');
+const messages = require('./data/messages');
 
-const getMessageRes = require('./getMessageRes');
+const getMessageRes = require('./utils/getMessageRes');
 const { QuoteApi } = require('./services/quoteApi');
 const createPredictionQuoteRes = require('./utils/createPredictionQuoteRes');
 
