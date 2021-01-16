@@ -23,7 +23,7 @@ app.post(`/bot${configs.botToken}`, (req, res) => {
 });
 
 mongoose
-	.connect(configs.databaseConnectionString, {
+	.connect(configs.dbUrl, {
 		useNewUrlParser: true,
 		useCreateIndex: true,
 		useFindAndModify: true,
