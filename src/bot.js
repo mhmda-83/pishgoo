@@ -35,9 +35,6 @@ bot.on('message', (message) => {
 	if (!message.dice) return undefined;
 	const { emoji, value } = message.dice;
 
-	const diceData = message.dice;
-	if (!diceData) return undefined;
-
 	if (message.from?.id) {
 		Statistics.create({
 			userId: message.from.id,
