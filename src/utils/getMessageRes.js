@@ -1,4 +1,4 @@
-const messages = require('./messages');
+const messages = require('../data/messages');
 
 function getMessageRes(emoji, value) {
 	if (typeof emoji !== 'string' && typeof value !== 'number') {
