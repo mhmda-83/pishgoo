@@ -11,6 +11,8 @@ const configs = getConfigs();
 const messages = require('./messages');
 
 const getMessageRes = require('./getMessageRes');
+const { QuoteApi } = require('./services/quoteApi');
+const createPredictionQuoteRes = require('./utils/createPredictionQuoteRes');
 
 const bot = new TelegramBot(
 	configs.botToken,
@@ -47,6 +49,13 @@ bot.on('message', (message) => {
 	}
 
 	bot.sendMessage(message.chat.id, getMessageRes(emoji, value), {
+		reply_to_message_id: message.message_id,
+	});
+});
+
+bot.onText(/\/predict/, async (message) => {
+	const quoteData = await QuoteApi.getRandomQuote('future-prediction');
+	bot.sendMessage(message.chat.id, createPredictionQuoteRes(quoteData), {
 		reply_to_message_id: message.message_id,
 	});
 });
