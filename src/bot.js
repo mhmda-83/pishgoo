@@ -60,4 +60,15 @@ bot.onText(/\/predict/, async (message) => {
 	});
 });
 
+bot.onText(/when am i (going to|gonna) die/i, (message) => {
+	bot.sendMessage(
+		message.chat.id,
+		'<pre language="javascript">> Uncaught TypeError: God.getDeathDateOf is not a function</pre>',
+		{
+			reply_to_message_id: message.message_id,
+			parse_mode: 'HTML',
+		},
+	);
+});
+
 module.exports = bot;
