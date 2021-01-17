@@ -17,7 +17,7 @@ const createPredictionQuoteRes = require('./utils/createPredictionQuoteRes');
 const bot = new TelegramBot(
 	configs.botToken,
 	configs.isProduction
-		? { polling: true }
+		? { polling: false }
 		: {
 				polling: true,
 				request: { proxy: 'http://127.0.0.1:8118', url: 'http://google.com' },
