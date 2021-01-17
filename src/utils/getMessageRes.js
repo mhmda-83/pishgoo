@@ -9,7 +9,7 @@ function getMessageRes(emoji, value) {
 		case '🏀':
 			return messages.basketballResponses[value - 1];
 		case '🎲':
-			return `عدد ${value}.`;
+			return `عدد ${value} 🤓`;
 		case '🎯':
 			return messages.dartResponses[value - 1];
 		case '⚽':
