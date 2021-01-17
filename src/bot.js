@@ -25,16 +25,15 @@ const bot = new TelegramBot(
 		  },
 );
 
-// eslint-disable-next-line consistent-return
-bot.on('message', (message) => {
-	if (message?.text === '/start') {
-		return bot.sendMessage(message.chat.id, messages.welcome, {
-			reply_to_message_id: message.message_id,
-			parse_mode: 'HTML',
-		});
-	}
+bot.onText(/\/start/, (message) => {
+	bot.sendMessage(message.chat.id, messages.welcome, {
+		reply_to_message_id: message.message_id,
+		parse_mode: 'HTML',
+	});
+});
 
-	if (!message.dice) return undefined;
+bot.on('message', (message) => {
+	if (!message.dice) return;
 	const { emoji, value } = message.dice;
 
 	if (message.from?.id) {
