@@ -9,5 +9,5 @@ exports.getConfigs = () => ({
 	botToken: getEnv('BOT_TOKEN'),
 	port: getEnv('PORT', 3000),
 	isProduction: getEnv('NODE_ENV') === 'production',
-	databaseConnectionString: getEnv('DATABASE_CONNECTION_STRING'),
+	dbUrl: getEnv('DB_URL'),
 });
