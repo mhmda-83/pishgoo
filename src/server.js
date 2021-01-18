@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const express = require('express');
+const basicAuth = require('express-basic-auth');
 
 const app = express();
 
@@ -22,50 +23,60 @@ app.post(`/bot${configs.botToken}`, (req, res) => {
 	bot.processUpdate(req.body);
 	res.sendStatus(200);
 });
-app.get(`/bot${configs.botToken}/statistics`, async (req, res) => {
-	const chatIds = (
-		await Statistics.aggregate([
-			{
-				$group: {
-					_id: '$chat.id',
+
+app.get(
+	`/bot${configs.botToken}/statistics`,
+	basicAuth({
+		users: {
+			[configs.basicAuthUsername]: configs.basicAuthPassword,
+		},
+		challenge: true,
+	}),
+	async (req, res) => {
+		const chatIds = (
+			await Statistics.aggregate([
+				{
+					$group: {
+						_id: '$chat.id',
+					},
 				},
-			},
-		])
-	)
-		// eslint-disable-next-line no-underscore-dangle
-		.map((chat) => chat._id);
+			])
+		)
+			// eslint-disable-next-line no-underscore-dangle
+			.map((chat) => chat._id);
 
-	const userIds = (
-		await Statistics.aggregate([
-			{
-				$group: { _id: '$userId' },
-			},
-		])
-	)
-		// eslint-disable-next-line no-underscore-dangle
-		.map((user) => user._id);
+		const userIds = (
+			await Statistics.aggregate([
+				{
+					$group: { _id: '$userId' },
+				},
+			])
+		)
+			// eslint-disable-next-line no-underscore-dangle
+			.map((user) => user._id);
 
-	let chats = [];
-	let users = [];
+		let chats = [];
+		let users = [];
 
-	for (let i = 0; i < chatIds.length; i += 1) {
-		chats.push(bot.getChat(chatIds[i]));
-	}
+		for (let i = 0; i < chatIds.length; i += 1) {
+			chats.push(bot.getChat(chatIds[i]));
+		}
 
-	for (let i = 0; i < userIds.length; i += 1) {
-		users.push(bot.getChat(userIds[i]));
-	}
+		for (let i = 0; i < userIds.length; i += 1) {
+			users.push(bot.getChat(userIds[i]));
+		}
 
-	chats = await Promise.all(chats);
-	users = await Promise.all(users);
+		chats = await Promise.all(chats);
+		users = await Promise.all(users);
 
-	res.json({
-		chats,
-		chats_count: chats.length,
-		users,
-		users_count: users.length,
-	});
-});
+		res.json({
+			chats,
+			chats_count: chats.length,
+			users,
+			users_count: users.length,
+		});
+	},
+);
 
 mongoose
 	.connect(configs.dbUrl, {

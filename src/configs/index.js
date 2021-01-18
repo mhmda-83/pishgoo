@@ -10,4 +10,6 @@ exports.getConfigs = () => ({
 	port: getEnv('PORT', 3000),
 	isProduction: getEnv('NODE_ENV') === 'production',
 	dbUrl: getEnv('DB_URL'),
+	basicAuthUsername: getEnv('BASIC_AUTH_USERNAME'),
+	basicAuthPassword: getEnv('BASIC_AUTH_PASSWORD'),
 });
