@@ -16,10 +16,10 @@
 		"axios": "0.21.1",
 		"dotenv": "8.2.0",
 		"express": "4.17.1",
-		"express-basic-auth": "1.2.0",
 		"lodash": "4.17.20",
 		"mongoose": "5.11.12",
-		"node-telegram-bot-api": "0.51.0"
+		"node-telegram-bot-api": "0.51.0",
+		"uuid": "8.3.2"
 	},
 	"devDependencies": {
 		"@commitlint/config-conventional": "11.0.0",

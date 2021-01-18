@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const express = require('express');
-const basicAuth = require('express-basic-auth');
 const _ = require('lodash');
+const uuid = require('uuid');
 
 const app = express();
 
@@ -19,79 +19,75 @@ const { getConfigs } = require('./configs');
 
 const configs = getConfigs();
 
+const webhookRouteToken = uuid.v4();
+const statisticsRouteToken = uuid.v4();
+
 app.use(express.json());
-app.post(`/bot${configs.botToken}`, (req, res) => {
+app.post(`/bot${webhookRouteToken}`, (req, res) => {
 	bot.processUpdate(req.body);
 	res.sendStatus(200);
 });
 
-app.get(
-	`/bot${configs.botToken}/statistics`,
-	basicAuth({
-		users: {
-			[configs.basicAuthUsername]: configs.basicAuthPassword,
-		},
-		challenge: true,
-	}),
-	async (req, res) => {
-		const chatIds = (
-			await Statistics.aggregate([
-				{
-					$group: {
-						_id: '$chat.id',
-					},
+// eslint-disable-next-line consistent-return
+app.get(`/${statisticsRouteToken}/statistics`, async (req, res) => {
+	if (req.query.token !== configs.token) return res.sendStatus(403);
+	const chatIds = (
+		await Statistics.aggregate([
+			{
+				$group: {
+					_id: '$chat.id',
 				},
-			])
-		)
-			// eslint-disable-next-line no-underscore-dangle
-			.map((chat) => chat._id);
+			},
+		])
+	)
+		// eslint-disable-next-line no-underscore-dangle
+		.map((chat) => chat._id);
 
-		const userIds = (
-			await Statistics.aggregate([
-				{
-					$group: { _id: '$userId' },
-				},
-			])
-		)
-			// eslint-disable-next-line no-underscore-dangle
-			.map((user) => user._id);
+	const userIds = (
+		await Statistics.aggregate([
+			{
+				$group: { _id: '$userId' },
+			},
+		])
+	)
+		// eslint-disable-next-line no-underscore-dangle
+		.map((user) => user._id);
 
-		let chats = [];
-		let users = [];
+	let chats = [];
+	let users = [];
 
-		for (let i = 0; i < chatIds.length; i += 1) {
-			chats.push(bot.getChat(chatIds[i]));
-		}
+	for (let i = 0; i < chatIds.length; i += 1) {
+		chats.push(bot.getChat(chatIds[i]));
+	}
 
-		for (let i = 0; i < userIds.length; i += 1) {
-			users.push(bot.getChat(userIds[i]));
-		}
+	for (let i = 0; i < userIds.length; i += 1) {
+		users.push(bot.getChat(userIds[i]));
+	}
 
-		chats = await Promise.all(chats);
-		users = await Promise.all(users);
+	chats = await Promise.all(chats);
+	users = await Promise.all(users);
 
-		const wantedFields = [
-			'id',
-			'title',
-			'first_name',
-			'last_name',
-			'bio',
-			'description',
-			'username',
-			'type',
-		];
+	const wantedFields = [
+		'id',
+		'title',
+		'first_name',
+		'last_name',
+		'bio',
+		'description',
+		'username',
+		'type',
+	];
 
-		chats = chats.map((chat) => _.pick(chat, wantedFields));
-		users = users.map((user) => _.pick(user, wantedFields));
+	chats = chats.map((chat) => _.pick(chat, wantedFields));
+	users = users.map((user) => _.pick(user, wantedFields));
 
-		res.json({
-			chats,
-			chats_count: chats.length,
-			users,
-			users_count: users.length,
-		});
-	},
-);
+	res.json({
+		chats,
+		chats_count: chats.length,
+		users,
+		users_count: users.length,
+	});
+});
 
 mongoose
 	.connect(configs.dbUrl, {
@@ -104,6 +100,13 @@ mongoose
 		console.log('Database Connected.');
 		app.listen(configs.port, () => {
 			console.log(`server started on port ${configs.port}`);
+			console.log(`webhook route token: ${webhookRouteToken}`);
+			console.log(`statistics route token: ${statisticsRouteToken}`);
+			if (configs.isProduction)
+				bot
+					.setWebHook(`${configs.baseUrl}/bot${webhookRouteToken}`)
+					.then(() => console.log('Webhook was set.'))
+					.catch(console.error);
 		});
 	})
 	.catch(console.error);
