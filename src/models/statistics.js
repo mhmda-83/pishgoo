@@ -8,8 +8,6 @@ const schema = new mongoose.Schema(
 		},
 		chat: {
 			id: { type: Number, required: true },
-			type: { type: String, required: true },
-			title: String,
 		},
 	},
 	{ timestamps: true },

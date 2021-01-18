@@ -41,8 +41,6 @@ bot.on('message', (message) => {
 			userId: message.from.id,
 			chat: {
 				id: message.chat.id,
-				type: message.chat.type,
-				title: message.chat.title,
 			},
 		});
 	}
