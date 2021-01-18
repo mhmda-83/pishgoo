@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const basicAuth = require('express-basic-auth');
+const _ = require('lodash');
 
 const app = express();
 
@@ -68,6 +69,20 @@ app.get(
 
 		chats = await Promise.all(chats);
 		users = await Promise.all(users);
+
+		const wantedFields = [
+			'id',
+			'title',
+			'first_name',
+			'last_name',
+			'bio',
+			'description',
+			'username',
+			'type',
+		];
+
+		chats = chats.map((chat) => _.pick(chat, wantedFields));
+		users = users.map((user) => _.pick(user, wantedFields));
 
 		res.json({
 			chats,
