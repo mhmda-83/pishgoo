@@ -35,15 +35,36 @@ app.get(`/bot${configs.botToken}/statistics`, async (req, res) => {
 		// eslint-disable-next-line no-underscore-dangle
 		.map((chat) => chat._id);
 
+	const userIds = (
+		await Statistics.aggregate([
+			{
+				$group: { _id: '$userId' },
+			},
+		])
+	)
+		// eslint-disable-next-line no-underscore-dangle
+		.map((user) => user._id);
+
 	let chats = [];
+	let users = [];
 
 	for (let i = 0; i < chatIds.length; i += 1) {
 		chats.push(bot.getChat(chatIds[i]));
 	}
 
-	chats = await Promise.all(chats);
+	for (let i = 0; i < userIds.length; i += 1) {
+		users.push(bot.getChat(userIds[i]));
+	}
 
-	res.json({ chats });
+	chats = await Promise.all(chats);
+	users = await Promise.all(users);
+
+	res.json({
+		chats,
+		chats_count: chats.length,
+		users,
+		users_count: users.length,
+	});
 });
 
 mongoose
