@@ -11,6 +11,7 @@ dotenv.config({
 });
 
 const bot = require('./bot');
+const Statistics = require('./models/statistics');
 
 const { getConfigs } = require('./configs');
 
@@ -20,6 +21,29 @@ app.use(express.json());
 app.post(`/bot${configs.botToken}`, (req, res) => {
 	bot.processUpdate(req.body);
 	res.sendStatus(200);
+});
+app.get(`/bot${configs.botToken}/statistics`, async (req, res) => {
+	const chatIds = (
+		await Statistics.aggregate([
+			{
+				$group: {
+					_id: '$chat.id',
+				},
+			},
+		])
+	)
+		// eslint-disable-next-line no-underscore-dangle
+		.map((chat) => chat._id);
+
+	let chats = [];
+
+	for (let i = 0; i < chatIds.length; i += 1) {
+		chats.push(bot.getChat(chatIds[i]));
+	}
+
+	chats = await Promise.all(chats);
+
+	res.json({ chats });
 });
 
 mongoose
