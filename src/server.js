@@ -64,8 +64,8 @@ app.get(`/${statisticsRouteToken}/statistics`, async (req, res) => {
 		users.push(bot.getChat(userIds[i]));
 	}
 
-	chats = await Promise.all(chats);
-	users = await Promise.all(users);
+	chats = await Promise.allSettled(chats);
+	users = await Promise.allSettled(users);
 
 	const wantedFields = [
 		'id',
@@ -78,8 +78,15 @@ app.get(`/${statisticsRouteToken}/statistics`, async (req, res) => {
 		'type',
 	];
 
-	chats = chats.map((chat) => _.pick(chat, wantedFields));
-	users = users.map((user) => _.pick(user, wantedFields));
+	chats = chats.filter((promiseResult) => promiseResult.status === 'fulfilled');
+	users = users.filter((promiseResult) => promiseResult.status === 'fulfilled');
+
+	chats = chats.map((promiseResult) =>
+		_.pick(promiseResult.value, wantedFields),
+	);
+	users = users.map((promiseResult) =>
+		_.pick(promiseResult.value, wantedFields),
+	);
 
 	res.json({
 		chats,
