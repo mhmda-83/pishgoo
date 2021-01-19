@@ -33,6 +33,7 @@ bot.onText(/\/start/, (message) => {
 		return;
 	bot.sendMessage(message.chat.id, messages.welcome, {
 		reply_to_message_id: message.message_id,
+		parse_mode: 'HTML',
 	});
 });
 
