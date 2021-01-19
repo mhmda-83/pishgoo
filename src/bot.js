@@ -26,9 +26,13 @@ const bot = new TelegramBot(
 );
 
 bot.onText(/\/start/, (message) => {
+	if (
+		message?.entities.length !== 1 ||
+		message?.entities[0].type !== 'bot_command'
+	)
+		return;
 	bot.sendMessage(message.chat.id, messages.welcome, {
 		reply_to_message_id: message.message_id,
-		parse_mode: 'HTML',
 	});
 });
 
@@ -51,6 +55,11 @@ bot.on('message', (message) => {
 });
 
 bot.onText(/\/predict/, async (message) => {
+	if (
+		message?.entities.length !== 1 ||
+		message?.entities[0].type !== 'bot_command'
+	)
+		return;
 	const quoteData = await QuoteApi.getRandomQuote('future-prediction');
 	bot.sendMessage(message.chat.id, createPredictionQuoteRes(quoteData), {
 		reply_to_message_id: message.message_id,
