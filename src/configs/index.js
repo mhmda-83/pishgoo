@@ -12,4 +12,5 @@ exports.getConfigs = () => ({
 	dbUrl: getEnv('DB_URL'),
 	token: getEnv('TOKEN'),
 	baseUrl: getEnv('BASE_URL'),
+	useTorProxy: getEnv('USE_TOR_PROXY', false),
 });

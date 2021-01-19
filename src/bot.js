@@ -14,16 +14,15 @@ const getMessageRes = require('./utils/getMessageRes');
 const { QuoteApi } = require('./services/quoteApi');
 const createPredictionQuoteRes = require('./utils/createPredictionQuoteRes');
 
-const bot = new TelegramBot(
-	configs.botToken,
-	configs.isProduction
-		? { polling: false }
-		: {
-				polling: true,
-				request: { proxy: 'http://127.0.0.1:8118', url: 'http://google.com' },
-				// eslint-disable-next-line no-mixed-spaces-and-tabs
-		  },
-);
+let bot;
+if (configs.useTorProxy === 'true') {
+	bot = new TelegramBot(configs.botToken, {
+		polling: !configs.isProduction,
+		request: { proxy: 'http://127.0.0.1:8118', url: 'http://google.com' },
+	});
+} else {
+	bot = new TelegramBot(configs.botToken, { polling: !configs.isProduction });
+}
 
 bot.onText(/\/start/, (message) => {
 	if (!message.entities) return;
