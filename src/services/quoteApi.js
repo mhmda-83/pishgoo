@@ -15,7 +15,7 @@ class QuoteApi {
 		const randomPageIndex = randomRangeNumber(1, firstPage.total_pages + 1);
 		let randomPage = firstPage;
 		if (randomPageIndex !== 1) {
-			randomPage = await api.getTag(`${tag}?count=${randomPageIndex}`);
+			randomPage = await api.getTag(`${tag}?page=${randomPageIndex}`);
 		}
 		const { quotes } = randomPage;
 		const quotesCount = quotes.length;
