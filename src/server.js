@@ -22,11 +22,7 @@ const configs = getConfigs();
 const webhookRouteToken = uuid.v4();
 const statisticsRouteToken = uuid.v4();
 
-app.use(express.json());
-app.post(`/bot${webhookRouteToken}`, (req, res) => {
-	bot.processUpdate(req.body);
-	res.sendStatus(200);
-});
+app.use(bot.webhookCallback(`/bot${webhookRouteToken}`));
 
 // eslint-disable-next-line consistent-return
 app.get(`/${statisticsRouteToken}/statistics`, async (req, res) => {
@@ -109,11 +105,7 @@ mongoose
 			console.log(`server started on port ${configs.port}`);
 			console.log(`webhook route token: ${webhookRouteToken}`);
 			console.log(`statistics route token: ${statisticsRouteToken}`);
-			if (configs.isProduction)
-				bot
-					.setWebHook(`${configs.baseUrl}/bot${webhookRouteToken}`)
-					.then(() => console.log('Webhook was set.'))
-					.catch(console.error);
+			if (!configs.isProduction) bot.launch();
 		});
 	})
 	.catch(console.error);
