@@ -20,6 +20,7 @@
 		"mongoose": "5.11.12",
 		"socks-proxy-agent": "5.0.0",
 		"telegraf": "4.0.1",
+		"telegraf-ratelimit": "2.0.0",
 		"uuid": "8.3.2"
 	},
 	"devDependencies": {

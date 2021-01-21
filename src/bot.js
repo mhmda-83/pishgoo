@@ -1,4 +1,5 @@
 const { Telegraf } = require('telegraf');
+const rateLimit = require('telegraf-ratelimit');
 const { SocksProxyAgent } = require('socks-proxy-agent');
 
 const { getConfigs } = require('./configs');
@@ -19,6 +20,13 @@ if (configs.useTorProxy === 'true') {
 } else {
 	bot = new Telegraf(configs.botToken);
 }
+
+bot.use(
+	rateLimit({
+		window: 1000,
+		limit: 3,
+	}),
+);
 
 bot.start((ctx) => {
 	ctx.reply(messages.welcome, {
