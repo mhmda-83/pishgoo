@@ -12,10 +12,9 @@ const getMessageRes = require('./utils/getMessageRes');
 const { QuoteApi } = require('./services/quoteApi');
 const createPredictionQuoteRes = require('./utils/createPredictionQuoteRes');
 
-const socksAgent = new SocksProxyAgent({ port: 9050, host: '127.0.0.1' });
-
 let bot;
 if (configs.useTorProxy === 'true') {
+	const socksAgent = new SocksProxyAgent({ port: 9050, host: '127.0.0.1' });
 	bot = new Telegraf(configs.botToken, { telegram: { agent: socksAgent } });
 } else {
 	bot = new Telegraf(configs.botToken);
