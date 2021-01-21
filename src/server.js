@@ -53,11 +53,11 @@ app.get(`/${statisticsRouteToken}/statistics`, async (req, res) => {
 	let users = [];
 
 	for (let i = 0; i < chatIds.length; i += 1) {
-		chats.push(bot.getChat(chatIds[i]));
+		chats.push(bot.telegram.getChat(chatIds[i]));
 	}
 
 	for (let i = 0; i < userIds.length; i += 1) {
-		users.push(bot.getChat(userIds[i]));
+		users.push(bot.telegram.getChat(userIds[i]));
 	}
 
 	chats = await Promise.allSettled(chats);
@@ -105,6 +105,13 @@ mongoose
 			console.log(`server started on port ${configs.port}`);
 			console.log(`webhook route token: ${webhookRouteToken}`);
 			console.log(`statistics route token: ${statisticsRouteToken}`);
+			if (configs.isProduction)
+				bot.telegram
+					.setWebhook(`${configs.baseUrl}/bot${webhookRouteToken}`)
+					.then(() => {
+						console.log('webhook was set');
+					})
+					.catch(console.error);
 			if (!configs.isProduction) bot.launch();
 		});
 	})
