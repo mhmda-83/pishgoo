@@ -44,8 +44,8 @@ bot.command('predict', async (ctx) => {
 });
 
 bot.hears(/when am i (going to|gonna) die/i, (ctx) => {
-	const probability = randomRangeNumber(1, 10);
-	if (probability === 1) {
+	const probability = randomRangeNumber(1, 101);
+	if (probability >= 25) {
 		ctx.reply('soon 🤯', {
 			reply_to_message_id: ctx.message.message_id,
 		});
