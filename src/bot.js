@@ -43,8 +43,7 @@ bot.command('predict', async (ctx) => {
 });
 
 bot.hears(/when am i (going to|gonna) die/i, (ctx) => {
-	bot.sendMessage(
-		ctx.message.chat.id,
+	ctx.reply(
 		'<pre language="javascript">> Uncaught TypeError: God.getDeathDateOf is not a function</pre>',
 		{
 			reply_to_message_id: ctx.message.message_id,
