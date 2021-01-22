@@ -43,10 +43,23 @@ bot.command('predict', async (ctx) => {
 	});
 });
 
-bot.hears(/when am i (going to|gonna) die/i, (ctx) => {
-	const probability = randomRangeNumber(1, 101);
-	if (probability >= 25) {
+bot.hears(/when am i (going to|gonna) (die|bite the dust)/i, (ctx) => {
+	const probability = randomRangeNumber(1, 6);
+	if (probability === 1) {
 		ctx.reply('soon 🤯', {
+			reply_to_message_id: ctx.message.message_id,
+		});
+	} else if (probability === 2) {
+		ctx.replyWithPhoto('https://ibb.co/sJk4mx6', {
+			reply_to_message_id: ctx.message.message_id,
+		});
+	} else if (probability === 3) {
+		ctx.replyWithPhoto('https://ibb.co/7N85wq7', {
+			reply_to_message_id: ctx.message.message_id,
+			caption: "death is currently having a good time\ndon't ruin it for him",
+		});
+	} else if (probability === 4) {
+		ctx.replyWithPhoto('https://ibb.co/nfY2fRS', {
 			reply_to_message_id: ctx.message.message_id,
 		});
 	} else {
