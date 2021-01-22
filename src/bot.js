@@ -12,6 +12,7 @@ const messages = require('./data/messages');
 const getMessageRes = require('./utils/getMessageRes');
 const { QuoteApi } = require('./services/quoteApi');
 const createPredictionQuoteRes = require('./utils/createPredictionQuoteRes');
+const randomRangeNumber = require('./utils/randomRangeNumber');
 
 let bot;
 if (configs.useTorProxy === 'true') {
@@ -43,13 +44,20 @@ bot.command('predict', async (ctx) => {
 });
 
 bot.hears(/when am i (going to|gonna) die/i, (ctx) => {
-	ctx.reply(
-		'<pre language="javascript">> Uncaught TypeError: God.getDeathDateOf is not a function</pre>',
-		{
+	const probability = randomRangeNumber(1, 10);
+	if (probability === 1) {
+		ctx.reply('soon 🤯', {
 			reply_to_message_id: ctx.message.message_id,
-			parse_mode: 'HTML',
-		},
-	);
+		});
+	} else {
+		ctx.reply(
+			'<pre language="javascript">> Uncaught TypeError: God.getDeathDateOf is not a function</pre>',
+			{
+				reply_to_message_id: ctx.message.message_id,
+				parse_mode: 'HTML',
+			},
+		);
+	}
 });
 
 bot.on('message', (ctx) => {
