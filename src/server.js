@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const _ = require('lodash');
-const uuid = require('uuid');
+const { nanoid } = require('nanoid');
 
 const app = express();
 
@@ -19,8 +19,8 @@ const { getConfigs } = require('./configs');
 
 const configs = getConfigs();
 
-const webhookRouteToken = uuid.v4();
-const statisticsRouteToken = uuid.v4();
+const webhookRouteToken = nanoid();
+const statisticsRouteToken = nanoid();
 
 app.use(bot.webhookCallback(`/bot${webhookRouteToken}`));
 
