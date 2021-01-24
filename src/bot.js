@@ -10,7 +10,7 @@ const configs = getConfigs();
 const messages = require('./data/messages');
 
 const getMessageRes = require('./utils/getMessageRes');
-const { QuoteApi } = require('./services/quoteApi');
+const { QuoteApi } = require('./services/quotableQuoteApi');
 const createPredictionQuoteRes = require('./utils/createPredictionQuoteRes');
 const randomRangeNumber = require('./utils/randomRangeNumber');
 
@@ -37,7 +37,7 @@ bot.start((ctx) => {
 });
 
 bot.command('predict', async (ctx) => {
-	const quoteData = await QuoteApi.getRandomQuote('future-prediction');
+	const quoteData = await QuoteApi.getRandomQuote('future');
 	ctx.reply(createPredictionQuoteRes(quoteData), {
 		reply_to_message_id: ctx.message.message_id,
 	});
