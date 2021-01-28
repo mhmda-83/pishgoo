@@ -10,7 +10,7 @@ const configs = getConfigs();
 const messages = require('./data/messages');
 
 const getMessageRes = require('./utils/getMessageRes');
-const { QuoteApi } = require('./services/quotableQuoteApi');
+const { QuoteApi } = require('./services/mamadQuoteApi');
 const createPredictionQuoteRes = require('./utils/createPredictionQuoteRes');
 const randomRangeNumber = require('./utils/randomRangeNumber');
 
