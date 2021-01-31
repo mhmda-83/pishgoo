@@ -74,7 +74,12 @@ bot.hears(/when am i (going to|gonna) (die|bite the dust)/i, (ctx) => {
 });
 
 bot.on('message', (ctx) => {
+	if (!ctx.message.dice && ctx.chat.type === 'private')
+		ctx.reply(messages.unknown, {
+			reply_to_message_id: ctx.message.message_id,
+		});
 	if (!ctx.message.dice) return;
+
 	const { emoji, value } = ctx.message.dice;
 
 	if (ctx.from.id) {
