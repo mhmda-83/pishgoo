@@ -73,6 +73,22 @@ bot.hears(/when am i (going to|gonna) (die|bite the dust)/i, (ctx) => {
 	}
 });
 
+bot.on('channel_post', (ctx) => {
+	if (!ctx.channelPost.dice) return;
+
+	const { emoji, value } = ctx.channelPost.dice;
+
+	Statistics.create({
+		chat: {
+			id: ctx.senderChat.id,
+		},
+	});
+
+	ctx.reply(getMessageRes(emoji, value), {
+		reply_to_message_id: ctx.channelPost.message_id,
+	});
+});
+
 bot.on('message', (ctx) => {
 	if (!ctx.message.dice && ctx.chat.type === 'private')
 		ctx.reply(messages.unknown, {
