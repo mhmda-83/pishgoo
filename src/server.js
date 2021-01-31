@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const mongoose = require('mongoose');
 const express = require('express');
 const _ = require('lodash');
@@ -27,7 +28,8 @@ app.use(bot.webhookCallback(`/bot${webhookRouteToken}`));
 // eslint-disable-next-line consistent-return
 app.get(`/${statisticsRouteToken}/statistics`, async (req, res) => {
 	if (req.query.token !== configs.token) return res.sendStatus(403);
-	const chatIds = (
+
+	let chatIds = (
 		await Statistics.aggregate([
 			{
 				$group: {
@@ -36,7 +38,7 @@ app.get(`/${statisticsRouteToken}/statistics`, async (req, res) => {
 			},
 		])
 	)
-		// eslint-disable-next-line no-underscore-dangle
+		.filter((chat) => chat._id != null)
 		.map((chat) => chat._id);
 
 	const userIds = (
@@ -46,22 +48,18 @@ app.get(`/${statisticsRouteToken}/statistics`, async (req, res) => {
 			},
 		])
 	)
-		// eslint-disable-next-line no-underscore-dangle
+		.filter((user) => user._id != null)
 		.map((user) => user._id);
 
+	chatIds = Array.from(new Set([...chatIds, ...userIds]));
+
 	let chats = [];
-	let users = [];
 
 	for (let i = 0; i < chatIds.length; i += 1) {
 		chats.push(bot.telegram.getChat(chatIds[i]));
 	}
 
-	for (let i = 0; i < userIds.length; i += 1) {
-		users.push(bot.telegram.getChat(userIds[i]));
-	}
-
 	chats = await Promise.allSettled(chats);
-	users = await Promise.allSettled(users);
 
 	const wantedFields = [
 		'id',
@@ -75,20 +73,20 @@ app.get(`/${statisticsRouteToken}/statistics`, async (req, res) => {
 	];
 
 	chats = chats.filter((promiseResult) => promiseResult.status === 'fulfilled');
-	users = users.filter((promiseResult) => promiseResult.status === 'fulfilled');
 
 	chats = chats.map((promiseResult) =>
 		_.pick(promiseResult.value, wantedFields),
 	);
-	users = users.map((promiseResult) =>
-		_.pick(promiseResult.value, wantedFields),
+
+	const users = chats.filter(
+		(chat) => userIds.findIndex((userId) => userId === chat.id) >= 0,
 	);
 
 	res.json({
 		chats,
-		chats_count: chats.length,
+		chatsCount: chats.length,
 		users,
-		users_count: users.length,
+		usersCount: users.length,
 	});
 });
 
