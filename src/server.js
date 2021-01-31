@@ -29,7 +29,7 @@ app.use(bot.webhookCallback(`/bot${webhookRouteToken}`));
 app.get(`/${statisticsRouteToken}/statistics`, async (req, res) => {
 	if (req.query.token !== configs.token) return res.sendStatus(403);
 
-	let chatIds = (
+	const chatIds = (
 		await Statistics.aggregate([
 			{
 				$group: {
@@ -51,15 +51,15 @@ app.get(`/${statisticsRouteToken}/statistics`, async (req, res) => {
 		.filter((user) => user._id != null)
 		.map((user) => user._id);
 
-	chatIds = Array.from(new Set([...chatIds, ...userIds]));
+	const allOfChatIds = Array.from(new Set([...chatIds, ...userIds]));
 
-	let chats = [];
+	let allOfChats = [];
 
-	for (let i = 0; i < chatIds.length; i += 1) {
-		chats.push(bot.telegram.getChat(chatIds[i]));
+	for (let i = 0; i < allOfChatIds.length; i += 1) {
+		allOfChats.push(bot.telegram.getChat(allOfChatIds[i]));
 	}
 
-	chats = await Promise.allSettled(chats);
+	allOfChats = await Promise.allSettled(allOfChats);
 
 	const wantedFields = [
 		'id',
@@ -72,14 +72,19 @@ app.get(`/${statisticsRouteToken}/statistics`, async (req, res) => {
 		'type',
 	];
 
-	chats = chats.filter((promiseResult) => promiseResult.status === 'fulfilled');
+	allOfChats = allOfChats.filter(
+		(promiseResult) => promiseResult.status === 'fulfilled',
+	);
 
-	chats = chats.map((promiseResult) =>
+	allOfChats = allOfChats.map((promiseResult) =>
 		_.pick(promiseResult.value, wantedFields),
 	);
 
-	const users = chats.filter(
+	const users = allOfChats.filter(
 		(chat) => userIds.findIndex((userId) => userId === chat.id) >= 0,
+	);
+	const chats = allOfChats.filter(
+		(chat) => chatIds.findIndex((chatId) => chatId === chat.id) >= 0,
 	);
 
 	res.json({
