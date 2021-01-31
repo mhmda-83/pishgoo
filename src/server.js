@@ -87,11 +87,15 @@ app.get(`/${statisticsRouteToken}/statistics`, async (req, res) => {
 		(chat) => chatIds.findIndex((chatId) => chatId === chat.id) >= 0,
 	);
 
+	const nonPrivateChats = allOfChats.filter((chat) => chat.type !== 'private');
+
 	res.json({
 		chats,
 		chatsCount: chats.length,
 		users,
 		usersCount: users.length,
+		nonPrivateChats,
+		nonPrivateChatsCount: nonPrivateChats.length,
 	});
 });
 
