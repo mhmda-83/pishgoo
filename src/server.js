@@ -114,7 +114,9 @@ mongoose
 			console.log(`statistics route token: ${statisticsRouteToken}`);
 			if (configs.isProduction)
 				bot.telegram
-					.setWebhook(`${configs.baseUrl}/bot${webhookRouteToken}`)
+					.setWebhook(`${configs.baseUrl}/bot${webhookRouteToken}`, {
+						allowed_updates: ['message'],
+					})
 					.then(() => {
 						console.log('webhook was set');
 					})
