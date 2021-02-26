@@ -73,6 +73,22 @@ bot.hears(/when am i (going to|gonna) (die|bite the dust)/i, (ctx) => {
 	}
 });
 
+bot.hears(/when does quarantine over/i, (ctx) => {
+	const probability = randomRangeNumber(1, 4);
+	if (probability === 1)
+		ctx.replyWithPhoto('https://ibb.co/5rnffMj', {
+			reply_to_message_id: ctx.message.message_id,
+		});
+	else if (probability === 2)
+		ctx.replyWithPhoto('https://ibb.co/Sstv46N', {
+			reply_to_message_id: ctx.message.message_id,
+		});
+	else
+		ctx.replyWithPhoto('https://ibb.co/m4NKS8B', {
+			reply_to_message_id: ctx.message.message_id,
+		});
+});
+
 bot.on('channel_post', (ctx) => {
 	if (!ctx.channelPost.dice) return;
 
