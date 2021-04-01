@@ -99,6 +99,8 @@ app.get(`/${statisticsRouteToken}/statistics`, async (req, res) => {
 	});
 });
 
+module.exports = app;
+
 mongoose
 	.connect(configs.dbUrl, {
 		useNewUrlParser: true,
