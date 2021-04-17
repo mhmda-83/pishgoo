@@ -17,11 +17,7 @@ function getMessageRes(emoji, value) {
 		case '🎳':
 			return messages.bowlingResponses[value - 1];
 		case '🎰': {
-			const numbers = [1, 22, 43, 64];
-
-			return numbers.includes(value)
-				? messages.doubleTripleChance.successful
-				: messages.doubleTripleChance.unsuccessful;
+			return messages.slotMachineResponses[value - 1];
 		}
 		default:
 			return value;
