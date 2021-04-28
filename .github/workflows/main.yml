@@ -15,8 +15,4 @@ jobs:
         run: npm install
       - name: test code
         run : npm test
-      - name: build Docker Image
-        uses: docker/setup-buildx-action@v1.2.0
-        with:
-          push: true
-          tags: amupxm/pishgoo:latest
+
