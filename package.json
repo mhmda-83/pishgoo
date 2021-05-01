@@ -20,6 +20,7 @@
 		"express": "4.17.1",
 		"lodash": "4.17.20",
 		"mongoose": "5.11.12",
+		"mysql": "2.18.1",
 		"nanoid": "3.1.20",
 		"socks-proxy-agent": "5.0.0",
 		"telegraf": "4.0.1",
