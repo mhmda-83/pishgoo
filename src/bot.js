@@ -43,6 +43,38 @@ bot.command('predict', async (ctx) => {
 	});
 });
 
+bot.command('fal', async (ctx) => {
+	const connection = mysql.createConnection({
+		host: 'localhost',
+		port: 6603,
+		user: 'root',
+		password: 'password',
+		database: 'Test',
+	});
+
+	connection.connect((err) => {
+		if (err) {
+			console.error(`error: ${err.message}`);
+		}
+	});
+
+	const FalID = Math.round(Math.random() * (495 - 1));
+	const sql = `SELECT * FROM faals  WHERE id=${FalID}`;
+
+	connection.query(sql, (error, results) => {
+		if (error) {
+			console.error(error.message);
+		}
+
+		Object.keys(results).forEach((key) => {
+			const row = results[key];
+			ctx.reply(`${row.Poem} ******************* ${row.Interpretation} `, {
+				reply_to_message_id: ctx.message.message_id,
+			});
+		});
+	});
+});
+
 bot.hears(/when am i (going to|gonna) (die|bite the dust)/i, (ctx) => {
 	const probability = randomRangeNumber(1, 6);
 	if (probability === 1) {
