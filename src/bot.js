@@ -2,10 +2,7 @@ const { Telegraf } = require('telegraf');
 const rateLimit = require('telegraf-ratelimit');
 const { SocksProxyAgent } = require('socks-proxy-agent');
 
-const { getConfigs } = require('./configs');
 const Statistics = require('./models/statistics');
-
-const configs = getConfigs();
 
 const messages = require('./data/messages');
 
@@ -14,7 +11,7 @@ const { QuoteApi } = require('./services/mamadQuoteApi');
 const createPredictionQuoteRes = require('./utils/createPredictionQuoteRes');
 const randomRangeNumber = require('./utils/randomRangeNumber');
 
-const createBot = () => {
+const createBot = (configs) => {
 	const socksAgent = new SocksProxyAgent({ port: 9050, host: '127.0.0.1' });
 	const bot = new Telegraf(
 		configs.botToken,

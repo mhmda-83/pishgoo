@@ -19,7 +19,7 @@ const Statistics = require('./models/statistics');
 const { getConfigs } = require('./configs');
 
 const configs = getConfigs();
-const bot = createBot();
+const bot = createBot(configs);
 
 const webhookRouteToken = nanoid();
 const statisticsRouteToken = nanoid();
