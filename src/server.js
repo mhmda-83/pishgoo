@@ -13,12 +13,13 @@ dotenv.config({
 	path: path.join(__dirname, '..', '.env'),
 });
 
-const bot = require('./bot');
+const createBot = require('./bot');
 const Statistics = require('./models/statistics');
 
 const { getConfigs } = require('./configs');
 
 const configs = getConfigs();
+const bot = createBot();
 
 const webhookRouteToken = nanoid();
 const statisticsRouteToken = nanoid();
