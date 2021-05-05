@@ -10,6 +10,7 @@ const getMessageRes = require('./utils/getMessageRes');
 const { QuoteApi } = require('./services/mamadQuoteApi');
 const createPredictionQuoteRes = require('./utils/createPredictionQuoteRes');
 const randomRangeNumber = require('./utils/randomRangeNumber');
+const { botComposer } = require('./handlers/bot');
 
 const createBot = (configs) => {
 	const socksAgent = new SocksProxyAgent({ port: 9050, host: '127.0.0.1' });
@@ -27,12 +28,7 @@ const createBot = (configs) => {
 		}),
 	);
 
-	bot.start((ctx) => {
-		ctx.reply(messages.welcome, {
-			reply_to_message_id: ctx.message.message_id,
-			parse_mode: 'HTML',
-		});
-	});
+	bot.start(botComposer);
 
 	bot.command('predict', async (ctx) => {
 		const quoteData = await QuoteApi.getRandomQuote('future');
