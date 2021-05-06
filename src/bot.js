@@ -4,11 +4,11 @@ const { SocksProxyAgent } = require('socks-proxy-agent');
 
 const { botHandlers } = require('./handlers/bot');
 
-const createBot = (configs) => {
+const createBot = (config) => {
 	const socksAgent = new SocksProxyAgent({ port: 9050, host: '127.0.0.1' });
 	const bot = new Telegraf(
-		configs.botToken,
-		configs.useTorProxy === 'true'
+		config.botToken,
+		config.useTorProxy === 'true'
 			? { telegram: { agent: socksAgent } }
 			: undefined,
 	);

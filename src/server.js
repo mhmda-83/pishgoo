@@ -17,14 +17,14 @@ const Statistics = require('./models/statistics');
 
 const { getConfigs } = require('./configs');
 
-const configs = getConfigs();
-const bot = createBot(configs);
+const config = getConfigs();
+const bot = createBot(config);
 
-app.use(bot.webhookCallback(`/bot${configs.webhookRouteToken}`));
+app.use(bot.webhookCallback(`/bot${config.webhookRouteToken}`));
 
 // eslint-disable-next-line consistent-return
-app.get(`/${configs.statisticsRouteToken}/statistics`, async (req, res) => {
-	if (req.query.token !== configs.token) return res.sendStatus(403);
+app.get(`/${config.statisticsRouteToken}/statistics`, async (req, res) => {
+	if (req.query.token !== config.token) return res.sendStatus(403);
 
 	const chatIds = (
 		await Statistics.aggregate([
@@ -99,7 +99,7 @@ app.get(`/${configs.statisticsRouteToken}/statistics`, async (req, res) => {
 module.exports = app;
 
 mongoose
-	.connect(configs.dbUrl, {
+	.connect(config.dbUrl, {
 		useNewUrlParser: true,
 		useCreateIndex: true,
 		useFindAndModify: true,
@@ -107,20 +107,20 @@ mongoose
 	})
 	.then(() => {
 		console.log('Database Connected.');
-		app.listen(configs.port, () => {
-			console.log(`server started on port ${configs.port}`);
-			console.log(`webhook route token: ${configs.webhookRouteToken}`);
-			console.log(`statistics route token: ${configs.statisticsRouteToken}`);
-			if (configs.isProduction)
+		app.listen(config.port, () => {
+			console.log(`server started on port ${config.port}`);
+			console.log(`webhook route token: ${config.webhookRouteToken}`);
+			console.log(`statistics route token: ${config.statisticsRouteToken}`);
+			if (config.isProduction)
 				bot.telegram
-					.setWebhook(`${configs.baseUrl}/bot${configs.webhookRouteToken}`, {
+					.setWebhook(`${config.baseUrl}/bot${config.webhookRouteToken}`, {
 						allowed_updates: ['message', 'channel_post'],
 					})
 					.then(() => {
 						console.log('webhook was set');
 					})
 					.catch(console.error);
-			if (!configs.isProduction) bot.launch();
+			if (!config.isProduction) bot.launch();
 		});
 	})
 	.catch(console.error);
