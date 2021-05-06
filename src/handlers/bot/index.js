@@ -2,6 +2,9 @@ const { Composer } = require('telegraf');
 const { predictHandler } = require('./predictHandler');
 const { startHandler } = require('./startHandler');
 const { deathEasterEggHandler } = require('./deathEasterEggHandler');
+const {
+	quarantineDurationEasterEggHandler,
+} = require('./quarantineDurationEasterEggHandler');
 
 const botHandlers = new Composer();
 
@@ -14,4 +17,8 @@ botHandlers.hears(
 	deathEasterEggHandler,
 );
 
+botHandlers.hears(
+	/when does quarantine over/i,
+	quarantineDurationEasterEggHandler,
+);
 module.exports = { botHandlers };
