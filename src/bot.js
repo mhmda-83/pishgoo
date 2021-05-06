@@ -8,7 +8,7 @@ const messages = require('./data/messages');
 
 const getMessageRes = require('./utils/getMessageRes');
 const randomRangeNumber = require('./utils/randomRangeNumber');
-const { botComposer } = require('./handlers/bot');
+const { botHandlers } = require('./handlers/bot');
 
 const createBot = (configs) => {
 	const socksAgent = new SocksProxyAgent({ port: 9050, host: '127.0.0.1' });
@@ -26,7 +26,7 @@ const createBot = (configs) => {
 		}),
 	);
 
-	bot.use(botComposer);
+	bot.use(botHandlers);
 
 	bot.hears(/when am i (going to|gonna) (die|bite the dust)/i, (ctx) => {
 		const probability = randomRangeNumber(1, 6);

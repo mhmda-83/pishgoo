@@ -2,10 +2,10 @@ const { Composer } = require('telegraf');
 const { predictHandler } = require('./predictHandler');
 const { startHandler } = require('./startHandler');
 
-const botComposer = new Composer();
+const botHandlers = new Composer();
 
-botComposer.start(startHandler);
+botHandlers.start(startHandler);
 
-botComposer.command('predict', predictHandler);
+botHandlers.command('predict', predictHandler);
 
-module.exports = { botComposer };
+module.exports = { botHandlers };
