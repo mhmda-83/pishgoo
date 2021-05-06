@@ -6,6 +6,7 @@ const {
 	quarantineDurationEasterEggHandler,
 } = require('./quarantineDurationEasterEggHandler');
 const { onChannelPostHandler } = require('./onChannelPostHandler');
+const { onMessageHandler } = require('./onMessageHandler');
 
 const botHandlers = new Composer();
 
@@ -24,5 +25,6 @@ botHandlers.hears(
 );
 
 botHandlers.on('channel_post', onChannelPostHandler);
+botHandlers.on('message', onMessageHandler);
 
 module.exports = { botHandlers };
