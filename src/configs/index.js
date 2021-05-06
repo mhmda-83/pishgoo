@@ -1,3 +1,4 @@
+const { nanoid } = require('nanoid');
 const getEnv = require('../utils/getEnv');
 
 exports.getConfigs = () => ({
@@ -8,4 +9,6 @@ exports.getConfigs = () => ({
 	token: getEnv('TOKEN'),
 	baseUrl: getEnv('BASE_URL'),
 	useTorProxy: getEnv('USE_TOR_PROXY', false),
+	webhookRouteToken: nanoid(),
+	statisticsRouteToken: nanoid(),
 });

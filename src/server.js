@@ -2,7 +2,6 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const _ = require('lodash');
-const { nanoid } = require('nanoid');
 
 const app = express();
 
@@ -21,13 +20,10 @@ const { getConfigs } = require('./configs');
 const configs = getConfigs();
 const bot = createBot(configs);
 
-const webhookRouteToken = nanoid();
-const statisticsRouteToken = nanoid();
-
-app.use(bot.webhookCallback(`/bot${webhookRouteToken}`));
+app.use(bot.webhookCallback(`/bot${configs.webhookRouteToken}`));
 
 // eslint-disable-next-line consistent-return
-app.get(`/${statisticsRouteToken}/statistics`, async (req, res) => {
+app.get(`/${configs.statisticsRouteToken}/statistics`, async (req, res) => {
 	if (req.query.token !== configs.token) return res.sendStatus(403);
 
 	const chatIds = (
@@ -113,11 +109,11 @@ mongoose
 		console.log('Database Connected.');
 		app.listen(configs.port, () => {
 			console.log(`server started on port ${configs.port}`);
-			console.log(`webhook route token: ${webhookRouteToken}`);
-			console.log(`statistics route token: ${statisticsRouteToken}`);
+			console.log(`webhook route token: ${configs.webhookRouteToken}`);
+			console.log(`statistics route token: ${configs.statisticsRouteToken}`);
 			if (configs.isProduction)
 				bot.telegram
-					.setWebhook(`${configs.baseUrl}/bot${webhookRouteToken}`, {
+					.setWebhook(`${configs.baseUrl}/bot${configs.webhookRouteToken}`, {
 						allowed_updates: ['message', 'channel_post'],
 					})
 					.then(() => {
