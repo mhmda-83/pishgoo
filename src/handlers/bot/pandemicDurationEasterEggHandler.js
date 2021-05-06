@@ -1,6 +1,6 @@
 const randomRangeNumber = require('../../utils/randomRangeNumber');
 
-const quarantineDurationEasterEggHandler = (ctx) => {
+const pandemicDurationEasterEggHandler = (ctx) => {
 	const probability = randomRangeNumber(1, 4);
 	if (probability === 1)
 		ctx.replyWithPhoto('https://ibb.co/5rnffMj', {
@@ -16,4 +16,4 @@ const quarantineDurationEasterEggHandler = (ctx) => {
 		});
 };
 
-module.exports = { quarantineDurationEasterEggHandler };
+module.exports = { pandemicDurationEasterEggHandler };

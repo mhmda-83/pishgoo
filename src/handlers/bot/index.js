@@ -3,8 +3,8 @@ const { predictHandler } = require('./predictHandler');
 const { startHandler } = require('./startHandler');
 const { deathEasterEggHandler } = require('./deathEasterEggHandler');
 const {
-	quarantineDurationEasterEggHandler,
-} = require('./quarantineDurationEasterEggHandler');
+	pandemicDurationEasterEggHandler,
+} = require('./pandemicDurationEasterEggHandler');
 const { onChannelPostHandler } = require('./onChannelPostHandler');
 const { onMessageHandler } = require('./onMessageHandler');
 
@@ -20,8 +20,8 @@ botHandlers.hears(
 );
 
 botHandlers.hears(
-	/when does quarantine over/i,
-	quarantineDurationEasterEggHandler,
+	/when will the corona pandemic end/i,
+	pandemicDurationEasterEggHandler,
 );
 
 botHandlers.on('channel_post', onChannelPostHandler);
