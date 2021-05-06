@@ -7,8 +7,6 @@ const Statistics = require('./models/statistics');
 const messages = require('./data/messages');
 
 const getMessageRes = require('./utils/getMessageRes');
-const { QuoteApi } = require('./services/mamadQuoteApi');
-const createPredictionQuoteRes = require('./utils/createPredictionQuoteRes');
 const randomRangeNumber = require('./utils/randomRangeNumber');
 const { botComposer } = require('./handlers/bot');
 
@@ -29,13 +27,6 @@ const createBot = (configs) => {
 	);
 
 	bot.use(botComposer);
-
-	bot.command('predict', async (ctx) => {
-		const quoteData = await QuoteApi.getRandomQuote('future');
-		ctx.reply(createPredictionQuoteRes(quoteData), {
-			reply_to_message_id: ctx.message.message_id,
-		});
-	});
 
 	bot.hears(/when am i (going to|gonna) (die|bite the dust)/i, (ctx) => {
 		const probability = randomRangeNumber(1, 6);
