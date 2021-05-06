@@ -28,7 +28,7 @@ const createBot = (configs) => {
 		}),
 	);
 
-	bot.start(botComposer);
+	bot.use(botComposer);
 
 	bot.command('predict', async (ctx) => {
 		const quoteData = await QuoteApi.getRandomQuote('future');
