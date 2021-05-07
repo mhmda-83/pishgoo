@@ -3,11 +3,12 @@ const mongoose = require('mongoose');
 const express = require('express');
 
 const { createAppHandlers } = require('./handlers/app');
+const { Bot } = require('./bot');
 
 class App {
-	constructor(config, bot) {
-		this.bot = bot;
+	constructor(config) {
 		this.config = config;
+		this.bot = new Bot(this.config);
 		this.app = express();
 		const handlers = createAppHandlers({ bot: this.bot, config: this.config });
 		this.app.use('/', handlers);

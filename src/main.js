@@ -1,7 +1,6 @@
 const path = require('path');
 const dotenv = require('dotenv');
 
-const { Bot } = require('./bot');
 const { App } = require('./server');
 
 const { getConfigs } = require('./configs');
@@ -12,6 +11,5 @@ dotenv.config({
 
 const config = getConfigs();
 
-const bot = new Bot(config);
-const app = new App(config, bot);
+const app = new App(config);
 app.launch();
