@@ -1,7 +1,7 @@
 const path = require('path');
 const dotenv = require('dotenv');
 
-const { App } = require('./server');
+const { App } = require('./app');
 
 const { getConfigs } = require('./configs');
 
