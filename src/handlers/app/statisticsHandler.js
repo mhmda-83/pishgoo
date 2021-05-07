@@ -32,7 +32,7 @@ const statisticsHandler = ({ bot, config }) => async (req, res) => {
 	let allOfChats = [];
 
 	for (let i = 0; i < allOfChatIds.length; i += 1) {
-		allOfChats.push(bot.telegram.getChat(allOfChatIds[i]));
+		allOfChats.push(bot.getChatById(allOfChatIds[i]));
 	}
 
 	allOfChats = await Promise.allSettled(allOfChats);

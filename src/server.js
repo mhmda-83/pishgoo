@@ -4,32 +4,41 @@ const express = require('express');
 
 const { createAppHandlers } = require('./handlers/app');
 
-const createApp = ({ config, bot }) => {
-	const app = express();
-	const handlers = createAppHandlers({ bot, config });
-	app.use(bot.webhookCallback(`/bot${config.webhookRouteToken}`));
-	app.use('/', handlers);
+class App {
+	constructor(config, bot) {
+		this.bot = bot;
+		this.config = config;
+		this.app = express();
+		const handlers = createAppHandlers({ bot: this.bot, config: this.config });
+		this.app.use('/', handlers);
+	}
 
-	return app;
-};
+	launch() {
+		mongoose
+			.connect(this.config.dbUrl, {
+				useNewUrlParser: true,
+				useCreateIndex: true,
+				useFindAndModify: true,
+				useUnifiedTopology: true,
+			})
+			.then(() => {
+				console.log('Database Connected.');
+			})
+			.catch(console.error);
 
-const launchApp = ({ app, config }) => {
-	mongoose
-		.connect(config.dbUrl, {
-			useNewUrlParser: true,
-			useCreateIndex: true,
-			useFindAndModify: true,
-			useUnifiedTopology: true,
-		})
-		.then(() => {
-			console.log('Database Connected.');
-		})
-		.catch(console.error);
-	app.listen(config.port, () => {
-		console.log(`server started on port ${config.port}`);
-		console.log(`webhook route token: ${config.webhookRouteToken}`);
-		console.log(`statistics route token: ${config.statisticsRouteToken}`);
-	});
-};
+		this.app.listen(this.config.port, () => {
+			console.log(`server started on port ${this.config.port}`);
+			console.log(`webhook route token: ${this.config.webhookRouteToken}`);
+			console.log(
+				`statistics route token: ${this.config.statisticsRouteToken}`,
+			);
+		});
+		if (!this.config.isProduction) this.bot.launchWithPooling();
+		else {
+			const webhookCallback = this.bot.launchWithWebhook();
+			this.app.use(webhookCallback);
+		}
+	}
+}
 
-module.exports = { createApp, launchApp };
+module.exports = { App };
