@@ -6,7 +6,7 @@ const { SocksProxyAgent } = require('socks-proxy-agent');
 const { botHandlers } = require('./handlers/bot');
 
 class Bot {
-	constructor(config) {
+	constructor(config, statisticsRepo) {
 		this.config = config;
 		const socksAgent = new SocksProxyAgent({ port: 9050, host: '127.0.0.1' });
 		this.bot = new Telegraf(
@@ -15,7 +15,7 @@ class Bot {
 				? { telegram: { agent: socksAgent } }
 				: undefined,
 		);
-
+		this.bot.context.statisticsRepo = statisticsRepo;
 		this.bot.use(
 			rateLimit({
 				window: 1000,
