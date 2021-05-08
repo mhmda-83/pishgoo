@@ -23,6 +23,10 @@ class MongooseStatisticsRepo {
 	findAllStatistics() {
 		return this.model.find().lean();
 	}
+
+	create(statistic) {
+		return this.model.create(statistic);
+	}
 }
 
 module.exports = { MongooseStatisticsRepo };
