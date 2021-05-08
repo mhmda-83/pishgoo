@@ -1,5 +1,4 @@
 const getMessageRes = require('../../utils/getMessageRes');
-const Statistics = require('../../models/statistics');
 const messages = require('../../data/messages');
 
 const onMessageHandler = (ctx) => {
@@ -12,7 +11,7 @@ const onMessageHandler = (ctx) => {
 	const { emoji, value } = ctx.message.dice;
 
 	if (ctx.from.id) {
-		Statistics.create({
+		ctx.statisticsRepo.create({
 			userId: ctx.from.id,
 			chat: {
 				id: ctx.chat.id,

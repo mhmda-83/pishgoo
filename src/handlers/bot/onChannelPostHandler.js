@@ -1,12 +1,11 @@
 const getMessageRes = require('../../utils/getMessageRes');
-const Statistics = require('../../models/statistics');
 
 const onChannelPostHandler = (ctx) => {
 	if (!ctx.channelPost.dice) return;
 
 	const { emoji, value } = ctx.channelPost.dice;
 
-	Statistics.create({
+	ctx.statisticsRepo.create({
 		chat: {
 			id: ctx.senderChat.id,
 		},
