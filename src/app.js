@@ -1,32 +1,26 @@
 /* eslint-disable no-underscore-dangle */
-const mongoose = require('mongoose');
 const express = require('express');
 
 const { createAppHandlers } = require('./handlers/app');
 const { Bot } = require('./bot');
 
 class App {
-	constructor(config) {
+	constructor(config, statisticsRepo) {
 		this.config = config;
 		this.bot = new Bot(this.config);
 		this.app = express();
-		const handlers = createAppHandlers({ bot: this.bot, config: this.config });
+		this.statisticsRepo = statisticsRepo;
+
+		const handlers = createAppHandlers({
+			bot: this.bot,
+			config: this.config,
+			statisticsRepo,
+		});
 		this.app.use('/', handlers);
 	}
 
 	launch() {
-		mongoose
-			.connect(this.config.dbUrl, {
-				useNewUrlParser: true,
-				useCreateIndex: true,
-				useFindAndModify: true,
-				useUnifiedTopology: true,
-			})
-			.then(() => {
-				console.log('Database Connected.');
-			})
-			.catch(console.error);
-
+		this.statisticsRepo.connect();
 		this.app.listen(this.config.port, () => {
 			console.log(`server started on port ${this.config.port}`);
 			console.log(`webhook route token: ${this.config.webhookRouteToken}`);
