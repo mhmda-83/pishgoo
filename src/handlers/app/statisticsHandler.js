@@ -1,60 +1,44 @@
 /* eslint-disable no-underscore-dangle */
 const _ = require('lodash');
-const Statistics = require('../../models/statistics');
 
-const statisticsHandler = ({ bot, config }) => async (req, res) => {
+const wantedFields = [
+	'id',
+	'title',
+	'first_name',
+	'last_name',
+	'bio',
+	'description',
+	'username',
+	'type',
+];
+
+const statisticsHandler = ({ bot, config, statisticsRepo }) => async (
+	req,
+	res,
+) => {
 	if (req.query.token !== config.token) return res.sendStatus(403);
 
-	const chatIds = (
-		await Statistics.aggregate([
-			{
-				$group: {
-					_id: '$chat.id',
-				},
-			},
-		])
-	)
-		.filter((chat) => chat._id != null)
-		.map((chat) => chat._id);
+	const statistics = await statisticsRepo.findAllStatistics();
 
-	const userIds = (
-		await Statistics.aggregate([
-			{
-				$group: { _id: '$userId' },
-			},
-		])
-	)
-		.filter((user) => user._id != null)
-		.map((user) => user._id);
+	const chatIds = statistics
+		.filter((doc) => doc.chat.id != null)
+		.map((doc) => doc.chat.id);
 
-	const allOfChatIds = Array.from(new Set([...chatIds, ...userIds]));
+	const userIds = statistics
+		.filter((user) => user.id != null)
+		.map((user) => user.id);
 
-	let allOfChats = [];
+	const allOfChatIds = _.uniq(chatIds.concat(userIds));
 
-	for (let i = 0; i < allOfChatIds.length; i += 1) {
-		allOfChats.push(bot.getChatById(allOfChatIds[i]));
-	}
+	const allOfChatsPromise = allOfChatIds.map(async (id) => {
+		const chat = await bot.getChatById(id);
+		return _.pick(chat, wantedFields);
+	});
 
-	allOfChats = await Promise.allSettled(allOfChats);
-
-	const wantedFields = [
-		'id',
-		'title',
-		'first_name',
-		'last_name',
-		'bio',
-		'description',
-		'username',
-		'type',
-	];
-
-	allOfChats = allOfChats.filter(
-		(promiseResult) => promiseResult.status === 'fulfilled',
-	);
-
-	allOfChats = allOfChats.map((promiseResult) =>
-		_.pick(promiseResult.value, wantedFields),
-	);
+	const allOfChatsPromiseRes = await Promise.allSettled(allOfChatsPromise);
+	const allOfChats = allOfChatsPromiseRes
+		.filter((promiseResult) => promiseResult.status === 'fulfilled')
+		.map((p) => p.value);
 
 	const users = allOfChats.filter(
 		(chat) => userIds.findIndex((userId) => userId === chat.id) >= 0,
