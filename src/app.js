@@ -7,7 +7,7 @@ const { Bot } = require('./bot');
 class App {
 	constructor(config, statisticsRepo) {
 		this.config = config;
-		this.bot = new Bot(this.config);
+		this.bot = new Bot(this.config, statisticsRepo);
 		this.app = express();
 		this.statisticsRepo = statisticsRepo;
 
