@@ -1,4 +1,4 @@
-const { QuoteApi } = require('../../services/mamadQuoteApi');
+const { QuoteApi } = require('../../services/favqsQuoteApi');
 const createPredictionQuoteRes = require('../../utils/createPredictionQuoteRes');
 
 const predictHandler = async (ctx) => {
