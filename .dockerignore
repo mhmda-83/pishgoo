@@ -1,12 +1,12 @@
 # dependencies
-node_modules/
+node_modules/*
 
 # testing
-coverage/
+coverage/*
 
 # production
-dist/
-lib/
+dist/*
+lib/*
 
 # dev tools
 /.idea
@@ -41,3 +41,6 @@ yarn-error.log*
 
 # Yarn Integrity file
 .yarn-integrity
+
+# Deployment
+.fandogh/*
