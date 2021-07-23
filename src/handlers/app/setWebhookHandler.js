@@ -6,16 +6,17 @@
 
 	let status = 'ERROR';
 
-	bot.bot.telegram
-		.setWebhook(`${config.baseUrl}/bot${config.webhookRouteToken}`, {
-			allowed_updates: ['message', 'channel_post'],
-		})
-		.then(() => {
-			status = 'SUCCESS';
-		})
-		.catch(() => {
-			status = 'ERROR';
-		});
+	try {
+		await bot.bot.telegram.setWebhook(
+			`${config.baseUrl}/bot${config.webhookRouteToken}`,
+			{
+				allowed_updates: ['message', 'channel_post'],
+			},
+		);
+		status = 'SUCCESS';
+	} catch {
+		status = 'ERROR';
+	}
 
 	return res.status(status === 'SUCCESS' ? 200 : 500).json({ status });
 };
