@@ -7,6 +7,7 @@ exports.getConfigs = () => ({
 	isProduction: getEnv('NODE_ENV') === 'production',
 	dbUrl: getEnv('DB_URL'),
 	token: getEnv('TOKEN'),
+	setWebhookToken: getEnv('SET_WEBHOOK_TOKEN'),
 	baseUrl: getEnv('BASE_URL'),
 	useTorProxy: getEnv('USE_TOR_PROXY', false),
 	webhookRouteToken: nanoid(),
