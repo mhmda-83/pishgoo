@@ -7,6 +7,7 @@ const {
 } = require('./pandemicDurationEasterEggHandler');
 const { onChannelPostHandler } = require('./onChannelPostHandler');
 const { onMessageHandler } = require('./onMessageHandler');
+const { sendBullshitJoke } = require('./sendBullshitJoke');
 
 const botHandlers = new Composer();
 
@@ -24,6 +25,12 @@ botHandlers.hears(
 	pandemicDurationEasterEggHandler,
 );
 
+botHandlers.hears(
+	/((say a|say) bullshit joke|یه جوک چرت بگو)/i,
+	sendBullshitJoke,
+);
+
+botHandlers.command('joke', sendBullshitJoke);
 botHandlers.on('channel_post', onChannelPostHandler);
 botHandlers.on('message', onMessageHandler);
 
