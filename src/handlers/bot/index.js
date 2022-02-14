@@ -8,6 +8,7 @@ const {
 const { onChannelPostHandler } = require('./onChannelPostHandler');
 const { onMessageHandler } = require('./onMessageHandler');
 const { sendBullshitJoke } = require('./sendBullshitJoke');
+const { deathCauseEasterEggHandler } = require('./deathCauseEasterEggHandler');
 
 const botHandlers = new Composer();
 
@@ -18,6 +19,11 @@ botHandlers.command('predict', predictHandler);
 botHandlers.hears(
 	/when am i (going to|gonna) (die|bite the dust)/i,
 	deathEasterEggHandler,
+);
+
+botHandlers.hears(
+	/how am i (going to|gonna) (die|bite the dust)/i,
+	deathCauseEasterEggHandler,
 );
 
 botHandlers.hears(
